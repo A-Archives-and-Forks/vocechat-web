@@ -55,11 +55,17 @@ const LinkifyText = ({
           },
           mention: ({ content }) => {
             if (!mention) return <>{content}</>;
-            // console.log();
-            if (/@[0-9]+/.test(content)) {
-              const uid = content.trim().slice(1);
+            if (/^@[0-9]+$/.test(content)) {
+              const uid = Number(content.slice(1));
+              if (!Number.isSafeInteger(uid)) return <>{content}</>;
               return (
-                <Mention uid={+uid} cid={cid} popover={mentionPopOver} textOnly={mentionTextOnly} />
+                <Mention
+                  uid={uid}
+                  cid={cid}
+                  popover={mentionPopOver}
+                  textOnly={mentionTextOnly}
+                  fallback={content}
+                />
               );
             }
             return <>{content}</>;

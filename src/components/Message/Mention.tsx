@@ -10,12 +10,13 @@ interface Props {
   popover?: boolean;
   cid?: number;
   textOnly?: boolean;
+  fallback?: string;
 }
 
-const Mention = ({ uid, popover = true, cid, textOnly = false }: Props) => {
+const Mention = ({ uid, popover = true, cid, textOnly = false, fallback = `@${uid}` }: Props) => {
   const usersData = useAppSelector((store) => store.users.byId, shallowEqual);
   const user = usersData[uid];
-  if (!user) return null;
+  if (!user?.name?.trim()) return <>{fallback}</>;
   if (textOnly) return <>{`@${user.name}`}</>;
   if (!popover) return <span className="px-0.5 text-primary-400">{`@${user.name}`}</span>;
   return (
